@@ -133,7 +133,7 @@ Contributions and forks are welcome — this is meant to be a starting point, no
 
 
 
-<strong style="font-size: 20px;">An art of work by team Privil</strong>
+<strong style="font-size: 28px;">An art of work by team Privil</strong>
 
 ---
 ---
