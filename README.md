@@ -131,8 +131,15 @@ Chronos currently runs entirely in-memory — refreshing the page resets your da
 
 Contributions and forks are welcome — this is meant to be a starting point, not a finished product.
 
----
 
+
+<strong>An art of work by team Privil</strong>
+Pranjal Tiwari
+Aditya Vinayak Pathak
+Divyaditya Singh
+Vansh Rastogi
+Aryan Sharma
+---
 ---
 
 <p align="center"><strong>Built for people who'd rather work than manage their to-do app.</strong></p>
