@@ -16,6 +16,8 @@ Built in pure HTML, Tailwind, and vanilla JS. **Clone it, open `index.html`, and
 
 ---
 
+🔗 **Live Demo:** [chronos-by-privil.netlify.app](https://chronos-by-privil.netlify.app/)
+
 ## 🖤 Design Philosophy
 
 Chronos is built around a deliberate **brutalist / architectural aesthetic**:
