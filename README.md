@@ -14,9 +14,9 @@ It's not trying to be "smart." It's trying to be **fast, honest, and distraction
 
 Built in pure HTML, Tailwind, and vanilla JS. **Clone it, open `index.html`, and it just works.**
 
+🔗 **Live Demo:** [chronos-by-privil.netlify.app](https://chronos-by-privil.netlify.app/)
 ---
 
-🔗 **Live Demo:** [chronos-by-privil.netlify.app](https://chronos-by-privil.netlify.app/)
 
 ## 🖤 Design Philosophy
 
