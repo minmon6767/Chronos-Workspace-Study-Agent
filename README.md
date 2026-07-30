@@ -161,7 +161,9 @@ Contributions and forks are welcome — this is meant to be a starting point, no
 
 
 
-<strong style="font-size: 28px;">An art of work by team Privil</strong>
+<p align="center">
+  <h1>𝗔𝗻 𝗮𝗿𝘁𝘄𝗼𝗿𝗸 𝗯𝘆 𝗧𝗲𝗮𝗺 𝗣𝗿𝗶𝘃𝗶𝗹 — 𝗧𝗵𝗮𝗻𝗸 𝘆𝗼𝘂!</h1>
+</p>
 
 ---
 ---
