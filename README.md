@@ -133,7 +133,7 @@ Contributions and forks are welcome — this is meant to be a starting point, no
 
 
 
-<strong>An art of work by team Privil</strong>
+<p><strong>An art of work by team Privil</strong></p>
 
 Pranjal Tiwari
 Aditya Vinayak Pathak
