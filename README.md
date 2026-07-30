@@ -162,7 +162,7 @@ Contributions and forks are welcome — this is meant to be a starting point, no
 
 
 <p align="center">
-  <h1>𝓐𝓷 𝓪𝓻𝓽𝔀𝓸𝓻𝓴 𝓫𝔂 𝓣𝓮𝓪𝓶 𝓟𝓻𝓲𝓿𝓲𝓵 — 𝓣𝓱𝓪𝓷𝓴 𝔂𝓸𝓾! 𝓶</h1>
+  <h2><b>✨ An artwork by Team Privil — Thank you! ✨</b></h2>
 </p>
 
 ---
