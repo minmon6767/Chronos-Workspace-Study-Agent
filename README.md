@@ -130,6 +130,8 @@ chronos-workspace/
 Chronos currently runs entirely in-memory — refreshing the page resets your data. That's intentional for v1 (zero setup, zero accounts), but natural next steps include:
 
 Contributions and forks are welcome — this is meant to be a starting point, not a finished product.
+
+## 😁 Heart for anyone reading down this
 ```
                                 █████     █████
                               ███    ██ ██     ███
