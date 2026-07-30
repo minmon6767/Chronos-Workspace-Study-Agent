@@ -1,16 +1,12 @@
-# ⚡ Privil Chronos — Study Planner
+# ⚡ Privil "Chronos — Study Planner"
 
 > **Your entire academic life, distilled into one stark, uncluttered black-and-white workspace.**
 > No sign-ups. No backend. No bloat. Just open the file and start working.
 
-![Static Badge](https://img.shields.io/badge/type-static%20site-black)
-![Static Badge](https://img.shields.io/badge/license-MIT-black)
-![Static Badge](https://img.shields.io/badge/dependencies-zero%20build%20step-black)
-![Static Badge](https://img.shields.io/badge/design-brutalist%20%2F%20editorial-black)
 
 ---
 
-## 🎯 The Pitch
+## 🎯 The Idea
 
 Every student's day is scattered across five different apps — a to-do list, a calendar, an exam tracker, a habit app, and a meditation app nobody actually opens. **Chronos** collapses all five into a single page, wrapped in a bold editorial design language that feels more like a design magazine than a SaaS dashboard.
 
@@ -113,11 +109,7 @@ That's it. No `npm install`, no `.env` file, no config.
 
 ## 🌐 Deploy It Free
 
-Since Chronos is 100% static, you can ship it live in under 2 minutes on any of these:
-
-- **GitHub Pages** → `Settings → Pages → Deploy from branch (main, root)`
-- **Netlify** → drag-and-drop the folder, or connect the repo for auto-deploys
-- **Vercel** → import the repo, zero configuration needed
+Since Chronos is 100% static, you can ship it live in under 2 minutes
 
 ---
 
@@ -137,19 +129,9 @@ chronos-workspace/
 
 Chronos currently runs entirely in-memory — refreshing the page resets your data. That's intentional for v1 (zero setup, zero accounts), but natural next steps include:
 
-- [ ] Persist tasks, habits, and schedule via `localStorage`
-- [ ] Wire the "Agent Plan" section to a real LLM API for genuine adaptive scheduling
-- [ ] Dark mode toggle (inverted black/white theme)
-- [ ] Export weekly agenda as PDF
-- [ ] Mobile swipe gestures between tabs
-
 Contributions and forks are welcome — this is meant to be a starting point, not a finished product.
 
 ---
-
-## 📝 License
-
-Licensed under the MIT License — see [LICENSE](LICENSE) for full details. Use it, fork it, remix it.
 
 ---
 
