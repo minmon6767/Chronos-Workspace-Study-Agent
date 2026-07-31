@@ -126,7 +126,7 @@
             <!-- NEW: Priority Zero -->
             <div>
                 <p class="text-sm font-bold tracking-widest uppercase mb-2">Focus of the day</p>
-                <input type="text" placeholder="WHAT IS THE ONE THING YOU MUST ACCOMPLISH TODAY?" class="w-full bg-transparent border-b-bw border-black text-3xl md:text-5xl uppercase tracking-tight pb-2 font-bebas placeholder-gray-300">
+                <input type="text" id="focusInput" placeholder="WHAT IS THE ONE THING YOU MUST ACCOMPLISH TODAY?" class="w-full bg-transparent border-b-bw border-black text-3xl md:text-5xl uppercase tracking-tight pb-2 font-bebas placeholder-gray-300" onchange="generateAgentPlan()">
             </div>
 
             <!-- Performance Dashboard -->
@@ -135,38 +135,41 @@
                 <div class="grid grid-cols-3 gap-8">
                     <div>
                         <p class="text-sm font-bold tracking-widest uppercase mb-1">Weekly Tasks</p>
-                        <p class="text-4xl bebas">24 / 30</p>
+                        <p class="text-4xl bebas" id="statWeeklyTasks">0 / 0</p>
                     </div>
                     <div>
                         <p class="text-sm font-bold tracking-widest uppercase mb-1">Focus Goals</p>
-                        <p class="text-4xl bebas">85%</p>
+                        <p class="text-4xl bebas" id="statFocusGoals">—</p>
                     </div>
                     <div>
                         <p class="text-sm font-bold tracking-widest uppercase mb-1">Agent Note</p>
-                        <p class="text-sm font-medium italic">"On track. Recommend breaking down Physics assignment."</p>
+                        <p class="text-sm font-medium italic" id="agentNoteText">Add tasks and deadlines, then generate a plan to see agent insights here.</p>
                     </div>
                 </div>
             </div>
 
             <!-- Agent Plan -->
             <div>
-                <div class="flex items-center gap-4 mb-6">
+                <div class="flex items-center gap-4 mb-6 flex-wrap">
                     <h2 class="text-4xl md:text-7xl tracking-tighter uppercase leading-none bebas">AGENT PLAN</h2>
                     <span class="text-xs border border-black px-2 py-1 font-bold tracking-widest uppercase">Draft</span>
+                    <button class="md:ml-auto border-bw border-black px-6 py-2 text-sm font-bold hover:bg-black hover:text-white uppercase transition-colors bebas tracking-widest" onclick="generateAgentPlan()">Generate Plan</button>
+                </div>
+
+                <div class="flex flex-wrap items-end gap-6 mb-6 pb-6 border-b border-black">
+                    <div>
+                        <label for="prefStudyHours" class="block text-xs font-bold tracking-widest uppercase mb-1">Hours available today</label>
+                        <input type="number" id="prefStudyHours" value="4" min="0.5" max="16" step="0.5" class="w-24 bg-transparent border-b-bw border-black text-2xl pb-1 bebas">
+                    </div>
+                    <div>
+                        <label for="prefStartTime" class="block text-xs font-bold tracking-widest uppercase mb-1">Start studying at</label>
+                        <input type="time" id="prefStartTime" value="09:00" class="w-32 bg-transparent border-b-bw border-black text-2xl pb-1 bebas">
+                    </div>
+                    <p class="text-xs text-gray-400 uppercase tracking-widest max-w-xs">Agent uses this, plus each topic's type and progress, to size study blocks and place them on your clock.</p>
                 </div>
                 
-                <div class="space-y-4">
-                    <div class="border-t-bw border-b-bw border-black py-4 grid grid-cols-12 gap-4 items-center">
-                        <div class="col-span-2 text-xl font-bold tracking-tight uppercase">TUE</div>
-                        <div class="col-span-6">
-                            <p class="text-2xl uppercase tracking-tight bebas">Physics set 4 (Part 1)</p>
-                            <p class="text-xs font-mono mt-1 text-gray-500">Agent: Split into 2 hrs to avoid overload before Wednesday Lab.</p>
-                        </div>
-                        <div class="col-span-4 flex gap-2 justify-end">
-                            <button class="border-bw border-black px-4 py-2 text-sm font-bold hover:bg-black hover:text-white uppercase transition-colors" onclick="this.parentElement.parentElement.remove(); showToast('Approved')">Accept</button>
-                            <button class="border-bw border-black px-4 py-2 text-sm font-bold hover:bg-black hover:text-white uppercase transition-colors" onclick="this.parentElement.parentElement.remove(); showToast('Rejected')">Reject</button>
-                        </div>
-                    </div>
+                <div class="space-y-4" id="agentPlanList">
+                    <p class="text-sm text-gray-400 uppercase tracking-widest py-4" id="agentPlanEmptyState">No plan yet. Add manual tasks or deadlines below, then hit "Generate Plan".</p>
                 </div>
             </div>
 
@@ -180,14 +183,7 @@
                 </div>
 
                 <div class="space-y-4" id="manualTaskList">
-                    <!-- Default Items -->
-                    <div class="flex items-center gap-4 py-2 border-b-bw border-black">
-                        <label class="custom-checkbox cursor-pointer relative w-6 h-6 border-bw border-black flex-shrink-0">
-                            <input type="checkbox" class="opacity-0 absolute h-0 w-0" onchange="toggleTask(this)">
-                            <div class="w-full h-full bg-white"></div>
-                        </label>
-                        <span class="text-xl md:text-3xl uppercase tracking-tight task-text transition-all duration-300 bebas">Review Calculus Notes</span>
-                    </div>
+                    <p class="text-sm text-gray-400 uppercase tracking-widest py-2" id="manualTaskEmptyState">No tasks yet. Add one above.</p>
                 </div>
             </div>
         </section>
@@ -262,32 +258,13 @@
                     <option value="PROJECT">PROJECT</option>
                 </select>
 
+                <input type="date" id="newDeadlineDate" class="bg-transparent border-b border-black text-sm md:text-base uppercase tracking-tight pb-2 bebas cursor-pointer" title="Due date (optional, but needed for the agent to schedule study time)">
+
                 <button class="border-bw border-black px-6 py-2 text-xl font-bold hover:bg-black hover:text-white transition-colors bebas" onclick="addDeadline()">ADD</button>
             </div>
 
             <div class="space-y-8" id="deadlinesList">
-                <!-- Example Deadline -->
-                <div class="border-b-bw border-t-bw border-black py-6 flex flex-col gap-4 -mt-[2px]">
-                    <div class="flex justify-between items-end">
-                        <div>
-                            <span class="text-xs font-bold px-2 py-1 bg-black text-white mb-2 inline-block">EXAM</span>
-                            <h3 class="text-3xl md:text-5xl tracking-tight uppercase bebas">Data Structures Midterm</h3>
-                        </div>
-                        <div class="text-2xl font-bold tracking-tight uppercase bebas text-right">
-                            <span class="text-sm tracking-widest block mb-1">PROGRESS</span>
-                            <span class="progress-text">50%</span>
-                        </div>
-                    </div>
-                    <!-- Covering Bar -->
-                    <div class="w-full h-8 border-bw border-black relative cursor-pointer group" onclick="updateProgress(this)">
-                        <div class="h-full bg-black transition-all duration-300 pointer-events-none flex items-center justify-end pr-2 overflow-hidden" style="width: 50%">
-                            <span class="text-white text-xs font-bold tracking-widest whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">CLICK TO UPDATE</span>
-                        </div>
-                        <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
-                            <span class="text-black text-xs font-bold tracking-widest mix-blend-difference group-hover:opacity-0 transition-opacity">CLICK TO UPDATE</span>
-                        </div>
-                    </div>
-                </div>
+                <p class="text-sm text-gray-400 uppercase tracking-widest py-4" id="deadlinesEmptyState">No deadlines yet. Add an exam, assignment, or project above.</p>
             </div>
         </section>
 
@@ -303,30 +280,7 @@
                 </div>
 
                 <div class="flex flex-col border-t-bw border-black" id="habitsList">
-                    <div class="flex items-center justify-between py-4 border-b-bw border-black">
-                        <div class="flex items-center gap-4">
-                            <label class="custom-checkbox cursor-pointer relative w-6 h-6 border-bw border-black flex-shrink-0">
-                                <input type="checkbox" class="opacity-0 absolute h-0 w-0" onchange="toggleHabit(this)">
-                                <div class="w-full h-full bg-white"></div>
-                            </label>
-                            <span class="text-3xl uppercase tracking-tight bebas">Drink 2L Water</span>
-                        </div>
-                        <div class="text-sm font-bold tracking-widest uppercase">
-                            STREAK: <span class="streak-count text-2xl bebas">3</span>
-                        </div>
-                    </div>
-                    <div class="flex items-center justify-between py-4 border-b-bw border-black">
-                        <div class="flex items-center gap-4">
-                            <label class="custom-checkbox cursor-pointer relative w-6 h-6 border-bw border-black flex-shrink-0">
-                                <input type="checkbox" class="opacity-0 absolute h-0 w-0" onchange="toggleHabit(this)">
-                                <div class="w-full h-full bg-white"></div>
-                            </label>
-                            <span class="text-3xl uppercase tracking-tight bebas">Read 10 Pages</span>
-                        </div>
-                        <div class="text-sm font-bold tracking-widest uppercase">
-                            STREAK: <span class="streak-count text-2xl bebas">12</span>
-                        </div>
-                    </div>
+                    <p class="text-sm text-gray-400 uppercase tracking-widest py-4" id="habitsEmptyState">No habits yet. Add one above.</p>
                 </div>
 
                 <!-- Quote Button embedded in Habits view -->
@@ -489,12 +443,45 @@
             }
         }
 
+        // --- Shared helpers ---
+        function clearEmptyState(id) {
+            const el = document.getElementById(id);
+            if (el) el.remove();
+        }
+
+        function escapeHtml(str) {
+            const div = document.createElement('div');
+            div.innerText = str;
+            return div.innerHTML;
+        }
+
+        function formatDueLabel(dateStr) {
+            const days = daysUntilDate(dateStr);
+            const due = new Date(dateStr + 'T00:00:00');
+            const dateText = due.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+            if (days === null) return '';
+            if (days < 0) return `DUE ${dateText} — OVERDUE`;
+            if (days === 0) return `DUE ${dateText} — TODAY`;
+            if (days === 1) return `DUE ${dateText} — TOMORROW`;
+            return `DUE ${dateText} — ${days} DAYS LEFT`;
+        }
+
+        function daysUntilDate(dateStr) {
+            if (!dateStr) return null;
+            const due = new Date(dateStr + 'T23:59:59');
+            const now = new Date();
+            const diffMs = due.setHours(23,59,59,999) - now.setHours(0,0,0,0);
+            return Math.round(diffMs / (1000 * 60 * 60 * 24));
+        }
+
         // --- Work Tasks ---
         function addTask(event) {
             if (event && event.type === 'keypress' && event.key !== 'Enter') return;
             const input = document.getElementById('newTaskInput');
             const taskText = input.value.trim();
             if (!taskText) return;
+
+            clearEmptyState('manualTaskEmptyState');
 
             const list = document.getElementById('manualTaskList');
             const newItem = document.createElement('div');
@@ -504,11 +491,12 @@
                     <input type="checkbox" class="opacity-0 absolute h-0 w-0" onchange="toggleTask(this)">
                     <div class="w-full h-full bg-white"></div>
                 </label>
-                <span class="text-xl md:text-3xl uppercase tracking-tight task-text transition-all duration-300 bebas">${taskText}</span>
+                <span class="text-xl md:text-3xl uppercase tracking-tight task-text transition-all duration-300 bebas">${escapeHtml(taskText)}</span>
             `;
             list.appendChild(newItem);
             input.value = '';
             showToast("Task added");
+            computeStats();
         }
 
         function toggleTask(checkbox) {
@@ -518,6 +506,7 @@
             } else {
                 text.classList.remove('strike');
             }
+            computeStats();
         }
 
         // --- Week Schedule ---
@@ -546,21 +535,28 @@
             if (event && event.type === 'keypress' && event.key !== 'Enter') return;
             const nameInput = document.getElementById('newDeadlineName');
             const typeInput = document.getElementById('newDeadlineType');
+            const dateInput = document.getElementById('newDeadlineDate');
             
             if (!nameInput.value.trim()) {
                 showToast("Please enter a name");
                 return;
             }
 
+            clearEmptyState('deadlinesEmptyState');
+
             const list = document.getElementById('deadlinesList');
             const newItem = document.createElement('div');
             newItem.className = 'border-b-bw border-t-bw border-black py-6 flex flex-col gap-4 -mt-[2px]';
+            newItem.dataset.due = dateInput.value || '';
+
+            const dueLabel = dateInput.value ? formatDueLabel(dateInput.value) : '';
             
             newItem.innerHTML = `
                 <div class="flex justify-between items-end">
                     <div>
-                        <span class="text-xs font-bold px-2 py-1 bg-black text-white mb-2 inline-block">${typeInput.value}</span>
-                        <h3 class="text-3xl md:text-5xl tracking-tight uppercase bebas">${nameInput.value}</h3>
+                        <span class="text-xs font-bold px-2 py-1 bg-black text-white mb-2 inline-block">${escapeHtml(typeInput.value)}</span>
+                        <h3 class="text-3xl md:text-5xl tracking-tight uppercase bebas">${escapeHtml(nameInput.value)}</h3>
+                        ${dueLabel ? `<p class="text-xs font-bold tracking-widest uppercase text-gray-500 mt-1 due-label">${dueLabel}</p>` : `<p class="text-xs font-bold tracking-widest uppercase text-gray-300 mt-1 due-label">NO DUE DATE SET</p>`}
                     </div>
                     <div class="text-2xl font-bold tracking-tight uppercase bebas text-right">
                         <span class="text-sm tracking-widest block mb-1">PROGRESS</span>
@@ -578,7 +574,9 @@
             `;
             list.appendChild(newItem);
             nameInput.value = '';
+            dateInput.value = '';
             showToast(`${typeInput.value} added`);
+            computeStats();
         }
 
         function updateProgress(element) {
@@ -593,6 +591,7 @@
             if (textElement) {
                 textElement.innerText = newWidth + '%';
             }
+            computeStats();
         }
 
         // --- Habits ---
@@ -601,6 +600,8 @@
             const input = document.getElementById('newHabitInput');
             const habitText = input.value.trim();
             if (!habitText) return;
+
+            clearEmptyState('habitsEmptyState');
 
             const list = document.getElementById('habitsList');
             const newItem = document.createElement('div');
@@ -611,7 +612,7 @@
                         <input type="checkbox" class="opacity-0 absolute h-0 w-0" onchange="toggleHabit(this)">
                         <div class="w-full h-full bg-white"></div>
                     </label>
-                    <span class="text-3xl uppercase tracking-tight bebas">${habitText}</span>
+                    <span class="text-3xl uppercase tracking-tight bebas">${escapeHtml(habitText)}</span>
                 </div>
                 <div class="text-sm font-bold tracking-widest uppercase">
                     STREAK: <span class="streak-count text-2xl bebas">0</span>
@@ -745,6 +746,306 @@
             breathInterval = setInterval(breathe, 19000);
             showToast("Follow the circle...");
         }
+
+        // --- Performance Dashboard (driven by real data, no fake stats) ---
+        function computeStats() {
+            const taskSpans = document.querySelectorAll('#manualTaskList .task-text');
+            const total = taskSpans.length;
+            let completed = 0;
+            taskSpans.forEach(t => { if (t.classList.contains('strike')) completed++; });
+            const weeklyEl = document.getElementById('statWeeklyTasks');
+            if (weeklyEl) weeklyEl.innerText = `${completed} / ${total}`;
+
+            const progressEls = document.querySelectorAll('#deadlinesList .progress-text');
+            const focusEl = document.getElementById('statFocusGoals');
+            if (focusEl) {
+                if (progressEls.length === 0) {
+                    focusEl.innerText = '—';
+                } else {
+                    let sum = 0;
+                    progressEls.forEach(p => sum += parseInt(p.innerText) || 0);
+                    focusEl.innerText = Math.round(sum / progressEls.length) + '%';
+                }
+            }
+        }
+
+        // --- Agent Plan: estimates hours needed per topic and schedules them on the clock ---
+
+        function parseTimeToMinutes(hhmm) {
+            if (!hhmm) return 9 * 60;
+            const [h, m] = hhmm.split(':').map(Number);
+            return (h * 60) + (m || 0);
+        }
+
+        function minutesToLabel(totalMinutes) {
+            const wrapped = ((totalMinutes % (24 * 60)) + (24 * 60)) % (24 * 60);
+            let h = Math.floor(wrapped / 60);
+            const min = wrapped % 60;
+            const period = h >= 12 ? 'PM' : 'AM';
+            let h12 = h % 12;
+            if (h12 === 0) h12 = 12;
+            const minStr = min < 10 ? '0' + min : '' + min;
+            return `${h12}:${minStr} ${period}`;
+        }
+
+        // Estimates total hours a topic realistically needs, using its type,
+        // a light keyword read of the topic name for difficulty, and how much
+        // progress is already made — then returns what's LEFT to study.
+        function estimateRemainingHours(title, type, progress) {
+            const baseByType = { EXAM: 10, PROJECT: 14, ASSIGNMENT: 4, TASK: 2, FOCUS: 1.5 };
+            let base = baseByType[type] || 5;
+
+            const lower = (title || '').toLowerCase();
+            const hardKeywords = ['final', 'comprehensive', 'midterm', 'thesis', 'capstone', 'research', 'advanced', 'design', 'build', 'system'];
+            const easyKeywords = ['quiz', 'review', 'recap', 'worksheet', 'practice', 'reading', 'notes'];
+            let bonus = 0;
+            hardKeywords.forEach(k => { if (lower.includes(k)) bonus += 2; });
+            easyKeywords.forEach(k => { if (lower.includes(k)) bonus -= 1; });
+
+            const total = Math.max(1, base + bonus);
+            const remaining = total * (1 - (progress || 0) / 100);
+            return Math.max(0.5, Math.round(remaining * 4) / 4); // nearest 15 minutes
+        }
+
+        function generateAgentPlan() {
+            const planList = document.getElementById('agentPlanList');
+            planList.innerHTML = '';
+
+            const prefHoursInput = document.getElementById('prefStudyHours');
+            const prefStartInput = document.getElementById('prefStartTime');
+            const dailyBudgetHours = Math.max(0.5, parseFloat(prefHoursInput?.value) || 4);
+            const startMinutes = parseTimeToMinutes(prefStartInput?.value);
+
+            // --- Collect raw items from what the user has actually entered ---
+            const items = [];
+
+            const focusInput = document.getElementById('focusInput');
+            const focusText = focusInput ? focusInput.value.trim() : '';
+
+            const deadlineDivs = Array.from(document.querySelectorAll('#deadlinesList > div'));
+            const deadlines = deadlineDivs.map(div => {
+                const name = div.querySelector('h3')?.innerText.trim() || '';
+                const type = div.querySelector('span.text-xs.font-bold')?.innerText.trim() || 'DEADLINE';
+                const progress = parseInt(div.querySelector('.progress-text')?.innerText) || 0;
+                const due = div.dataset.due || '';
+                const daysLeft = due ? daysUntilDate(due) : null;
+                return { name, type, progress, daysLeft };
+            }).filter(d => d.name && d.progress < 100);
+
+            let focusMatched = false;
+            deadlines.forEach(d => {
+                const isFocus = focusText && d.name.toLowerCase() === focusText.toLowerCase();
+                if (isFocus) focusMatched = true;
+                const remainingHours = estimateRemainingHours(d.name, d.type, d.progress);
+                items.push({
+                    label: d.type,
+                    title: d.name,
+                    remainingHours,
+                    daysLeft: d.daysLeft,
+                    progress: d.progress,
+                    isFocus
+                });
+            });
+
+            const taskSpans = Array.from(document.querySelectorAll('#manualTaskList .task-text'));
+            const dealtWith = deadlines.map(d => d.name.toLowerCase());
+            taskSpans
+                .filter(t => !t.classList.contains('strike'))
+                .map(t => t.innerText.trim())
+                .forEach(taskText => {
+                    if (!taskText || dealtWith.includes(taskText.toLowerCase())) return;
+                    const isFocus = focusText && taskText.toLowerCase() === focusText.toLowerCase();
+                    if (isFocus) focusMatched = true;
+                    items.push({
+                        label: 'TASK',
+                        title: taskText,
+                        remainingHours: estimateRemainingHours(taskText, 'TASK', 0),
+                        daysLeft: null,
+                        progress: 0,
+                        isFocus
+                    });
+                });
+
+            if (focusText && !focusMatched) {
+                items.push({
+                    label: 'TODAY',
+                    title: focusText,
+                    remainingHours: estimateRemainingHours(focusText, 'FOCUS', 0),
+                    daysLeft: null,
+                    progress: 0,
+                    isFocus: true
+                });
+            }
+
+            if (items.length === 0) {
+                planList.innerHTML = '<p class="text-sm text-gray-400 uppercase tracking-widest py-4" id="agentPlanEmptyState">Nothing to plan yet. Add tasks, deadlines, or a daily focus above, then generate again.</p>';
+                const noteEl = document.getElementById('agentNoteText');
+                if (noteEl) noteEl.innerText = 'Add tasks and deadlines, then generate a plan to see agent insights here.';
+                showToast('Nothing to plan yet');
+                return;
+            }
+
+            // --- Work out how many hours per day each item needs ---
+            items.forEach(item => {
+                let perDayHours;
+                let urgencyNote;
+                if (item.daysLeft === null) {
+                    perDayHours = item.remainingHours;
+                    urgencyNote = `No due date set, so the agent is suggesting the full ${item.remainingHours} hrs estimated for this today.`;
+                } else if (item.daysLeft <= 0) {
+                    perDayHours = item.remainingHours;
+                    urgencyNote = item.daysLeft === 0
+                        ? `Due today. All ${item.remainingHours} remaining hrs are needed now.`
+                        : `Overdue — all ${item.remainingHours} remaining hrs should be prioritized immediately.`;
+                } else {
+                    perDayHours = Math.max(0.25, Math.round((item.remainingHours / item.daysLeft) * 4) / 4);
+                    urgencyNote = `${item.remainingHours} hrs remain over ${item.daysLeft} day${item.daysLeft === 1 ? '' : 's'} left, so ~${perDayHours} hrs/day keeps you on pace.`;
+                }
+                if (perDayHours > 6) {
+                    urgencyNote += ' That is more than fits in one realistic day — treat this as top priority and keep chipping away over the next few days too.';
+                    perDayHours = 6;
+                }
+                item.perDayHours = perDayHours;
+                item.urgencyNote = urgencyNote;
+            });
+
+            // --- Priority order: focus/matched item first, then soonest due date, then lowest progress ---
+            items.sort((a, b) => {
+                if (a.isFocus !== b.isFocus) return a.isFocus ? -1 : 1;
+                const aScore = a.daysLeft === null ? 999 : a.daysLeft;
+                const bScore = b.daysLeft === null ? 999 : b.daysLeft;
+                if (aScore !== bScore) return aScore - bScore;
+                return a.progress - b.progress;
+            });
+
+            // --- Place items on the clock within today's available hours ---
+            let pointer = startMinutes;
+            let remainingBudgetMinutes = Math.round(dailyBudgetHours * 60);
+            const BREAK_MINUTES = 10;
+            const scheduled = [];
+            const overflow = [];
+
+            items.slice(0, 7).forEach(item => {
+                const neededMinutes = Math.max(15, Math.round(item.perDayHours * 60));
+                if (remainingBudgetMinutes < 15) {
+                    overflow.push(item);
+                    return;
+                }
+                const durationMinutes = Math.min(neededMinutes, remainingBudgetMinutes);
+                const partial = durationMinutes < neededMinutes;
+                const timeLabel = `${minutesToLabel(pointer)} – ${minutesToLabel(pointer + durationMinutes)}`;
+                const hoursScheduled = Math.round((durationMinutes / 60) * 4) / 4;
+
+                let note = item.urgencyNote;
+                if (partial) {
+                    note += ` Only ${hoursScheduled} hrs fit in today's ${dailyBudgetHours} hr budget — continue the rest tomorrow.`;
+                }
+
+                scheduled.push({
+                    timeLabel,
+                    label: item.label,
+                    title: item.title,
+                    hours: hoursScheduled,
+                    note
+                });
+
+                pointer += durationMinutes + BREAK_MINUTES;
+                remainingBudgetMinutes -= durationMinutes;
+            });
+
+            items.slice(7).forEach(item => overflow.push(item));
+
+            overflow.forEach(item => {
+                scheduled.push({
+                    timeLabel: 'LATER',
+                    label: item.label,
+                    title: item.title,
+                    hours: item.perDayHours,
+                    note: `${item.urgencyNote} No room left in today's ${dailyBudgetHours} hr budget — plan this for tomorrow or increase your available hours above.`
+                });
+            });
+
+            scheduled.forEach(entry => {
+                const row = document.createElement('div');
+                row.className = 'border-t-bw border-b-bw border-black py-4 grid grid-cols-12 gap-4 items-center -mt-[2px]';
+                row.innerHTML = `
+                    <div class="col-span-3 md:col-span-2 text-sm md:text-lg font-bold tracking-tight uppercase leading-tight">${escapeHtml(entry.timeLabel)}</div>
+                    <div class="col-span-5 md:col-span-6">
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <span class="text-xs border border-black px-1.5 py-0.5 font-bold tracking-widest uppercase">${escapeHtml(entry.label)}</span>
+                            <span class="text-xs font-bold tracking-widest uppercase text-gray-500">${entry.hours} HRS</span>
+                        </div>
+                        <p class="text-xl md:text-2xl uppercase tracking-tight bebas">${escapeHtml(entry.title)}</p>
+                        <p class="text-xs font-mono mt-1 text-gray-500">Agent: ${escapeHtml(entry.note)}</p>
+                    </div>
+                    <div class="col-span-4 flex gap-2 justify-end">
+                        <button class="border-bw border-black px-4 py-2 text-sm font-bold hover:bg-black hover:text-white uppercase transition-colors" onclick="acceptPlanEntry(this)">Accept</button>
+                        <button class="border-bw border-black px-4 py-2 text-sm font-bold hover:bg-black hover:text-white uppercase transition-colors" onclick="rejectPlanEntry(this)">Reject</button>
+                    </div>
+                `;
+                row.dataset.title = entry.title;
+                row.dataset.acceptText = entry.timeLabel === 'LATER' ? entry.title : `${entry.title} (${entry.timeLabel}, ${entry.hours} hrs)`;
+                planList.appendChild(row);
+            });
+
+            const totalHoursToday = scheduled
+                .filter(e => e.timeLabel !== 'LATER')
+                .reduce((sum, e) => sum + e.hours, 0);
+            const first = scheduled[0];
+            const noteEl = document.getElementById('agentNoteText');
+            if (noteEl) {
+                noteEl.innerText = totalHoursToday > 0
+                    ? `"${Math.round(totalHoursToday * 4) / 4} hrs planned today. Start with ${first.title} at ${first.timeLabel.split(' – ')[0]}."`
+                    : `"Today's budget is full or too small — try raising 'Hours available today' above."`;
+            }
+
+            showToast('Plan generated');
+        }
+
+        function acceptPlanEntry(button) {
+            const row = button.closest('.grid');
+            const title = row.dataset.title || '';
+            const acceptText = row.dataset.acceptText || title;
+
+            const alreadyExists = Array.from(document.querySelectorAll('#manualTaskList .task-text'))
+                .some(t => t.innerText.trim().toLowerCase().startsWith(title.toLowerCase()));
+
+            if (!alreadyExists && title) {
+                clearEmptyState('manualTaskEmptyState');
+                const list = document.getElementById('manualTaskList');
+                const newItem = document.createElement('div');
+                newItem.className = 'flex items-center gap-4 py-2 border-b-bw border-black';
+                newItem.innerHTML = `
+                    <label class="custom-checkbox cursor-pointer relative w-6 h-6 border-bw border-black flex-shrink-0">
+                        <input type="checkbox" class="opacity-0 absolute h-0 w-0" onchange="toggleTask(this)">
+                        <div class="w-full h-full bg-white"></div>
+                    </label>
+                    <span class="text-xl md:text-3xl uppercase tracking-tight task-text transition-all duration-300 bebas">${escapeHtml(acceptText)}</span>
+                `;
+                list.appendChild(newItem);
+            }
+
+            removePlanRow(row);
+            showToast('Added to tasks');
+            computeStats();
+        }
+
+        function rejectPlanEntry(button) {
+            removePlanRow(button.closest('.grid'));
+            showToast('Rejected');
+        }
+
+        function removePlanRow(row) {
+            row.remove();
+            const planList = document.getElementById('agentPlanList');
+            if (!planList.querySelector('.grid')) {
+                planList.innerHTML = '<p class="text-sm text-gray-400 uppercase tracking-widest py-4" id="agentPlanEmptyState">No plan yet. Add manual tasks or deadlines above, then hit "Generate Plan".</p>';
+            }
+        }
+
+        // Initial state on load
+        computeStats();
+
 
         // --- Zen Focus ---
         function toggleZen() {
