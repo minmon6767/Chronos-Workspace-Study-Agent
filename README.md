@@ -4,7 +4,7 @@
 > No sign-ups. No backend. No bloat. Just open the file and start working.
 
 
----
+----
 
 ## 🎯 The Idea
 
@@ -15,7 +15,7 @@ It's not trying to be "smart." It's trying to be **fast, honest, and distraction
 Built in pure HTML, Tailwind, and vanilla JS. **Clone it, open `index.html`, and it just works.**
 
 🔗 **Live Demo:** [chronos-by-privil.netlify.app](https://chronos-by-privil.netlify.app/)
----
+----
 
 
 ## 🖤 Design Philosophy
@@ -30,7 +30,7 @@ Chronos is built around a deliberate **brutalist / architectural aesthetic**:
 
 The result feels less like a productivity tool and more like a **printed planner brought to life.**
 
----
+----
 
 ## 🧭 Feature Walkthrough
 
@@ -74,7 +74,7 @@ Because burnout isn't a productivity strategy. A dedicated recovery suite:
 | **5-4-3-2-1 Grounding** | An interactive sensory-grounding checklist for anxiety/stress reset, rooted in a well-known mindfulness technique |
 | **Zen Focus** | A hypnotic, continuously morphing black blob animation (CSS `border-radius` keyframes) for ambient, screen-based meditation |
 
----
+----
 
 ## 🛠️ Tech Stack
 
@@ -87,7 +87,7 @@ Because burnout isn't a productivity strategy. A dedicated recovery suite:
 
 **No npm install. No build step. No server. Just open `index.html`.**
 
----
+----
 
 ## 🚀 Getting Started
 
@@ -107,13 +107,13 @@ Then either:
 
 That's it. No `npm install`, no `.env` file, no config.
 
----
+----
 
 ## 🌐 Deploy It Free
 
 Since Chronos is 100% static, you can ship it live in under 2 minutes
 
----
+----
 
 ## 📁 Project Structure
 
@@ -169,7 +169,7 @@ Contributions and forks are welcome — this is meant to be a starting point, no
   <h2><b> An artwork by Team Privil — Thank you! </b></h2>
 </p>
 
----
----
+----
+----
 
 <p align="center"><strong>Built for people who'd rather work than manage their to-do app.</strong></p>
